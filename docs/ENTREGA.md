@@ -14,15 +14,14 @@ historial y recuperación; importación de nombres e historial antiguo verificab
 actualizador por instaladores versionados y lanzador Windows con recuperación.
 
 **Esto todavía es una beta de código fuente, no un instalador Windows probado.**
-Las pruebas locales se realizaron en Linux. Los scripts Windows y el workflow
-están preparados, pero su subida al repositorio fue rechazada por la revisión
-automática al no encontrar autorización explícita para publicación remota.
-No se volvió a intentar esa publicación por otro medio.
+Las pruebas locales se realizaron en Linux. El código y la configuración de
+pruebas ya están publicados en la rama `reconstruccion/editorial-0.9` del
+repositorio y en el [PR #1](https://github.com/santiagolaghi/fotos-claras/pull/1).
 
-La autorización pendiente se limita a subir el código y configuración de pruebas
-a `santiagolaghi/fotos-claras`, rama `reconstruccion/editorial-0.9`, para ejecutar
-el workflow Windows. No requiere subir fotografías familiares ni el diseño
-adjunto, ni publicar una release estable.
+GitHub creó las ejecuciones de Windows, pero las detuvo antes de asignar un
+runner por una restricción de cuenta. No se ejecutaron pruebas allí ni se
+generó un EXE o instalador. El PR permanece en borrador hasta poder completar
+esa verificación. La versión no se publicó como estable.
 
 El ZIP incluye el código, scripts para Windows, auditoría, arquitectura, pruebas,
 resultados locales y capturas Qt con fotografías públicas de prueba. Las fotos

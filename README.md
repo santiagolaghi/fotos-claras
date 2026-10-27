@@ -5,9 +5,12 @@ versiones para revisión, identidades corregibles, filtros combinados, álbumes
 virtuales y movimientos recuperables. **0.9.0-beta.1**, no versión estable.
 
 La reconstrucción se encuentra en la rama `reconstruccion/editorial-0.9`.
-El workflow **Windows · pruebas e instalador beta** construye un instalador,
-prueba la aplicación instalada y genera capturas y evidencia. Los artefactos
-están en la ejecución del workflow. No hay una release estable automática.
+El workflow **Windows · pruebas e instalador beta** está configurado para
+construir el instalador y verificar la aplicación instalada. Los primeros
+intentos quedaron bloqueados antes de asignar un runner por una restricción
+de cuenta: todavía no hay instalador Windows generado ni verificado.
+El [PR #1](https://github.com/santiagolaghi/fotos-claras/pull/1) permanece en borrador.
+No hay una release estable automática.
 
 - [Auditoría del código previo](docs/AUDITORIA.md)
 - [Arquitectura](docs/ARQUITECTURA.md)

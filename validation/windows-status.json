@@ -1,0 +1,24 @@
+{
+  "source_commit": "f2085e274dea016a59b6c37518519535711520e6",
+  "branch": "reconstruccion/editorial-0.9",
+  "pull_request": "https://github.com/santiagolaghi/fotos-claras/pull/1",
+  "runs": [
+    {
+      "id": 40594878187,
+      "event": "push",
+      "runner_assigned": false,
+      "steps_executed": 0
+    },
+    {
+      "id": 40594951437,
+      "event": "pull_request",
+      "runner_assigned": false,
+      "steps_executed": 0
+    }
+  ],
+  "status": "blocked_before_execution",
+  "reason": "GitHub account requires attention; no Windows runner was assigned",
+  "windows_tests_verified": false,
+  "windows_installer_generated": false,
+  "stable_release": false
+}

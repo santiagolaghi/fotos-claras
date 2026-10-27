@@ -39,8 +39,12 @@ instala dos directorios de versión del mismo ejecutable, abre el EXE instalado
 y prueba vuelta al directorio anterior. Es una prueba del empaquetado y el
 lanzador, no de compatibilidad entre dos esquemas futuros distintos.
 Genera evidencia en el artefacto Windows-evidencia y el instalador por separado.
-La subida fue bloqueada por revisión automática; **el workflow Windows no se
-ejecutó en esta entrega**. Solo una ejecución exitosa acredita esos pasos. Las capturas son Qt offscreen;
+El código se publicó en la rama `reconstruccion/editorial-0.9` y en el
+[PR #1](https://github.com/santiagolaghi/fotos-claras/pull/1). Se intentó ejecutar
+Windows en los runs 40594878187 y 40594951437, pero GitHub no asignó un runner
+por una restricción de la cuenta. **Ningún paso Windows llegó a ejecutarse y
+no se generó instalador.** Se requiere resolver esa restricción y repetir la
+ejecución. Solo una ejecución exitosa acredita esos pasos. Las capturas son Qt offscreen;
 no equivalen a validación interactiva física de DPI 125/150/200, touch o varios
 monitores. Esa comprobación manual continúa pendiente.
 
