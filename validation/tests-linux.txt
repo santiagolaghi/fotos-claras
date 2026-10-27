@@ -1,0 +1,35 @@
+test_16bit_samples_not_collapsed_by_rgb_conversion (test_catalog.CatalogFlow.test_16bit_samples_not_collapsed_by_rgb_conversion) ... ok
+test_backup_and_schema_version (test_catalog.CatalogFlow.test_backup_and_schema_version) ... ok
+test_boolean_filters_unknown_faces_and_album (test_catalog.CatalogFlow.test_boolean_filters_unknown_faces_and_album) ... ok
+test_cached_face_results_do_not_restart_models (test_catalog.CatalogFlow.test_cached_face_results_do_not_restart_models) ... ok
+test_cancel_move_resume_and_no_photo_loss (test_catalog.CatalogFlow.test_cancel_move_resume_and_no_photo_loss) ... ok
+test_cannot_merge_cooccurring_people (test_catalog.CatalogFlow.test_cannot_merge_cooccurring_people) ... ok
+test_copy_undo_is_recoverable (test_catalog.CatalogFlow.test_copy_undo_is_recoverable) ... ok
+test_corrupt_is_error_not_zero_faces (test_catalog.CatalogFlow.test_corrupt_is_error_not_zero_faces) ... ok
+test_crash_after_copy_before_delete_and_resume (test_catalog.CatalogFlow.test_crash_after_copy_before_delete_and_resume) ... ok
+test_crash_after_intent_before_copy_retries_safely (test_catalog.CatalogFlow.test_crash_after_intent_before_copy_retries_safely) ... ok
+test_destination_appearing_after_plan_and_modified_undo (test_catalog.CatalogFlow.test_destination_appearing_after_plan_and_modified_undo) ... ok
+test_exact_pixels_metadata_and_alpha_and_sequence (test_catalog.CatalogFlow.test_exact_pixels_metadata_and_alpha_and_sequence) ... ok
+test_face_errors_are_not_no_faces (test_catalog.CatalogFlow.test_face_errors_are_not_no_faces) ... ok
+test_import_legacy_move_history_and_undo (test_catalog.CatalogFlow.test_import_legacy_move_history_and_undo) ... ok
+test_incremental_and_restart (test_catalog.CatalogFlow.test_incremental_and_restart) ... ok
+test_legacy_import_preserves_names_and_files (test_catalog.CatalogFlow.test_legacy_import_preserves_names_and_files) ... ok
+test_move_preview_collision_undo_and_identity (test_catalog.CatalogFlow.test_move_preview_collision_undo_and_identity) ... ok
+test_name_split_veto_merge_ignore_restart (test_catalog.CatalogFlow.test_name_split_veto_merge_ignore_restart) ... ok
+test_overlapping_libraries_keep_independent_catalogs (test_catalog.CatalogFlow.test_overlapping_libraries_keep_independent_catalogs) ... ok
+test_pause_does_not_mark_unvisited_missing (test_catalog.CatalogFlow.test_pause_does_not_mark_unvisited_missing) ... ok
+test_quarantine_undo_excludes_without_disappearing_identity (test_catalog.CatalogFlow.test_quarantine_undo_excludes_without_disappearing_identity) ... ok
+test_all_sections_resize_persistence_no_auto_scan (test_ui.QtFlow.test_all_sections_resize_persistence_no_auto_scan) ... ok
+test_background_job_keeps_event_loop_responsive (test_ui.QtFlow.test_background_job_keeps_event_loop_responsive) ... ok
+test_gallery_click_multiselect_and_viewer (test_ui.QtFlow.test_gallery_click_multiselect_and_viewer) ... This plugin does not support propagateSizeHints()
+ok
+test_model_checksum_and_cache (test_updates.Updates.test_model_checksum_and_cache) ... ok
+test_other_repository_rejected_before_network (test_updates.Updates.test_other_repository_rejected_before_network) ... ok
+test_release_selects_verified_asset (test_updates.Updates.test_release_selects_verified_asset) ... ok
+test_stable_vs_beta_order_and_missing_package (test_updates.Updates.test_stable_vs_beta_order_and_missing_package) ... ok
+test_verified_download_corruption_and_cancel_cleanup (test_updates.Updates.test_verified_download_corruption_and_cancel_cleanup) ... ok
+
+----------------------------------------------------------------------
+Ran 29 tests in 3.590s
+
+OK

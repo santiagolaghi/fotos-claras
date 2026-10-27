@@ -1,0 +1,11 @@
+{
+  "platform": "linux",
+  "files": 10000,
+  "real_sources": 8,
+  "max_input_side": 400,
+  "initial_seconds": 61.549,
+  "cached_seconds": 5.468,
+  "catalog_open_seconds": 0.078,
+  "peak_process_mib": 196.26,
+  "limitations": "Repeated resized real photographs; measures file count/cache, not full-resolution unique-photo matching or 10,000-person clustering."
+}

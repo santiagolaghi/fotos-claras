@@ -1,0 +1,35 @@
+Rostros: {'obama.jpg': 1, 'obama2.jpg': 1, 'biden.jpg': 1, 'two_people.jpg': 2, 'scenery.jpg': 0}
+Coseno misma persona / diferente: 0.743654727935791 0.08499418199062347
+Grupos reales: [(5, ''), (2, '')]
+{
+  "platform": "linux",
+  "real_photo_counts": {
+    "obama.jpg": 1,
+    "obama2.jpg": 1,
+    "biden.jpg": 1,
+    "two_people.jpg": 2,
+    "scenery.jpg": 0
+  },
+  "cosine_same_person": 0.743654727935791,
+  "cosine_different_people": 0.08499418199062347,
+  "elapsed_seconds": 2.013,
+  "assertions": [
+    "exact copy",
+    "simulated WhatsApp compression (resize/JPEG, not actual WhatsApp export)",
+    "distinct real exposure rejected",
+    "similar sports frames rejected",
+    "real-embedding split/merge",
+    "real-file move/undo",
+    "virtual album",
+    "1/2/0 face detection",
+    "same-person grouping",
+    "two-person all/only filters",
+    "restart identities"
+  ],
+  "limitations": [
+    "Small public sample, not a family benchmark",
+    "No age/profile/twins coverage",
+    "Not real WhatsApp messaging export",
+    "Windows UI and installer require separate workflow evidence"
+  ]
+}
