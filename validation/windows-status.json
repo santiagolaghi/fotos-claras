@@ -20,5 +20,12 @@
   "reason": "GitHub account requires attention; no Windows runner was assigned",
   "windows_tests_verified": false,
   "windows_installer_generated": false,
-  "stable_release": false
+  "stable_release": false,
+  "current_version": "0.9.0-beta.2",
+  "retry": {
+    "run_id": 40594951437,
+    "job_id": 122618962671,
+    "runner_assigned": false,
+    "steps_executed": 0
+  }
 }

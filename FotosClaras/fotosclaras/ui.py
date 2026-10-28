@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (QApplication,QMainWindow,QWidget,QFrame,QLabel,QP
 from . import __version__
 from .db import Catalog,data_dir
 from .widgets import Task,Thumbnails,PhotoView,Viewer,Mosaic
+from .dialogs import FolderPicker,validate_directory
 from .theme import STYLE,icon
 from . import indexer,identity,matching,operations,updates
 
@@ -39,6 +40,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Fotos Claras · '+__version__);self.resize(1400,880);self.setMinimumSize(980,680)
         self.setWindowIcon(icon('album'));self.setStyleSheet(STYLE)
         self.library=None;self.busy=False;self.task=None;self.cancel=threading.Event();self.pending_close=False
+        self._folder_picker=None
         self.pool=QThreadPool(self);self.pool.setMaxThreadCount(1);self.thumbs=Thumbnails(self)
         self.section=0;self.current_grid=None;self.group_index=0;self.groups=[];self.album_filter=None
         self.filters=dict(include=[],exclude=[],mode='all',count=None,sort='date',favorite=False)
@@ -82,12 +84,12 @@ class MainWindow(QMainWindow):
 
     def cancel_job(self):self.cancel.set();self.cancel_button.setEnabled(False);self.status.setText('Pausando al completar el archivo actual…')
 
-    def run(self,fn,finished=None):
+    def run(self,fn,finished=None,failed=None):
         if self.busy:return
         self.busy=True;self.elapsed=0;self.cancel=threading.Event();self.cancel_button.show();self.cancel_button.setEnabled(True)
         self.library_button.setEnabled(False);self.scan_button.setEnabled(False);self.face_button.setEnabled(False)
         self.progress.setRange(0,0);self.task=Task(lambda report:fn(self.cancel,report));self.task.signals.progress.connect(self.on_progress)
-        self.task.signals.finished.connect(lambda result:self.job_done(result,finished));self.task.signals.failed.connect(self.job_error);self.pool.start(self.task)
+        self.task.signals.finished.connect(lambda result:self.job_done(result,finished));self.task.signals.failed.connect(lambda message:self.job_error(message,failed));self.pool.start(self.task)
 
     def on_progress(self,stage,done,total):
         self.elapsed=0
@@ -103,14 +105,17 @@ class MainWindow(QMainWindow):
         paused=self.cancel.is_set();self.reset_job();self.refresh()
         errors=result.get('errors',0) if isinstance(result,dict) else 0
         self.status.setText('Pausado. Podés reanudar sin repetir los archivos completados.' if paused else (f'Análisis completado con {errors} errores. Abrí Configuración para ver los archivos afectados.' if errors else 'Listo. Tus cambios quedaron guardados.'))
-        if finished:
+        if finished and not paused and not self.pending_close:
             try:finished(result)
             except Exception as exc:self.error(exc)
         if self.pending_close:self.close()
 
-    def job_error(self,message):
-        self.reset_job();self.refresh();self.status.setText('No se completó la operación. Revisá el detalle.');self.error(message)
-        if self.pending_close:self.pending_close=False
+    def job_error(self,message,failed=None):
+        paused=self.cancel.is_set()
+        self.reset_job();self.refresh();self.status.setText('Selección cancelada.' if paused else 'No se completó la operación. Revisá el detalle.')
+        if self.pending_close:self.close();return
+        if failed:failed(message)
+        elif not paused:self.error(message)
 
     def error(self,message):QMessageBox.warning(self,'Fotos Claras',str(message))
 
@@ -119,9 +124,38 @@ class MainWindow(QMainWindow):
 
     def choose_folder(self):
         if self.busy:return
-        path=QFileDialog.getExistingDirectory(self,'Elegí la carpeta de tus fotografías',self.library['path'] if self.library else '')
-        if not path:return
-        self.library=self.catalog.library(path);self.section=0;self.album_filter=None;self.load_library()
+        if self._folder_picker is not None:
+            self._folder_picker.raise_();self._folder_picker.activateWindow();return
+        recent=[r['path'] for r in self.catalog.rows('SELECT path FROM libraries ORDER BY created DESC')]
+        picker=FolderPicker(self,initial=self.library['path'] if self.library else '',recent=recent)
+        self._folder_picker=picker
+        picker.submitted.connect(self.check_folder)
+        picker.finished.connect(self.folder_picker_finished)
+        picker.open()
+
+    def check_folder(self,path):
+        def validate(cancel,report):
+            report('Comprobando carpeta',0,1)
+            return validate_directory(path,cancel)
+        self.run(validate,self.apply_folder,self.folder_failed)
+
+    def apply_folder(self,path):
+        picker=self._folder_picker
+        if picker is None:return
+        try:
+            self.library=self.catalog.library(path);self.section=0;self.album_filter=None;self.group_index=0;self.load_library()
+        except Exception as exc:
+            picker.show_error('No se pudo abrir la biblioteca: '+str(exc));return
+        picker.accept()
+        self.status.setText('Carpeta elegida. Tocá «Actualizar biblioteca» para buscar tus fotos.')
+
+    def folder_failed(self,message):
+        if self._folder_picker is not None:self._folder_picker.show_error(message)
+
+    def folder_picker_finished(self,result):
+        picker=self._folder_picker;self._folder_picker=None
+        if result!=QDialog.Accepted and self.busy:self.cancel.set()
+        if picker is not None:picker.deleteLater()
 
     def load_library(self):
         self.catalog.set_pref('last_library',self.library['id']);self.breadcrumb.setText(Path(self.library['path']).name.upper() or self.library['path'])
@@ -554,4 +588,5 @@ class MainWindow(QMainWindow):
     def closeEvent(self,event):
         if self.busy:
             self.pending_close=True;self.cancel_job();event.ignore();return
+        if self._folder_picker is not None:self._folder_picker.reject()
         self.thumbs.shutdown();self.catalog.close();event.accept()

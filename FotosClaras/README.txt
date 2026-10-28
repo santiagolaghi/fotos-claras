@@ -1,4 +1,4 @@
-FOTOS CLARAS 0.9.0-beta.1 · ALBUM EDITORIAL
+FOTOS CLARAS 0.9.0-beta.2 · ALBUM EDITORIAL
 
 INSTALACION WINDOWS
 Usa Fotos-Claras-Setup.exe, generado por el workflow Windows del repositorio.
@@ -6,7 +6,9 @@ Instala y abre Fotos Claras desde el acceso directo. No necesita Python.
 Esta version es beta: consultar docs/VERIFICACION.md para evidencia y limites.
 
 PRIMER USO
-1. Elegi la carpeta principal con tus fotos. Cambiarla no inicia un analisis.
+1. Toca Elegir carpeta. Usa Examinar o pega la ruta y confirma Usar esta
+   carpeta. Si no se puede abrir, el motivo aparece en el mismo cuadro.
+   Cambiar la carpeta no inicia un analisis.
 2. Toca Actualizar biblioteca. Podes pausar y continuar por archivo.
 3. Busca rostros. Solo la primera vez descarga modelos locales verificados.
 4. En Personas, doble clic en un grupo: revisa los rostros y guarda el nombre.

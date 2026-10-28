@@ -16,7 +16,7 @@ if ($p.ExitCode -ne 0) { throw 'Previous installer failed' }
 $p = Start-Process (Join-Path $repo 'dist\Fotos-Claras-Setup.exe') -ArgumentList @('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/NOAUTOLAUNCH',"/DIR=$install") -Wait -PassThru
 if ($p.ExitCode -ne 0) { throw 'Installer failed' }
 $active = (Get-Content (Join-Path $install 'active-version.txt') -Raw).Trim()
-if ($active -ne '0.9.0-beta.1') { throw 'Unexpected active version' }
+if ($active -ne '0.9.0-beta.2') { throw 'Unexpected active version' }
 $exe = Join-Path $install 'FotosClarasLauncher.exe'
 $p = Start-Process $exe -ArgumentList '--smoke' -PassThru
 if (-not $p.WaitForExit(60000)) { $p.Kill(); throw 'Installed UI timed out' }
@@ -27,13 +27,13 @@ if ((Get-Content $sentinel -Raw).Trim() -ne 'state-must-survive-upgrade') { thro
 python (Join-Path $PSScriptRoot 'state_probe.py') check
 if ($LASTEXITCODE -ne 0) { throw 'Catalog state changed after upgrade' }
 $previous = (Get-Content (Join-Path $install 'previous-version.txt') -Raw).Trim()
-if ($previous -ne '0.9.0-beta.0') { throw 'Previous version missing' }
+if ($previous -ne '0.9.0-beta.1') { throw 'Previous version missing' }
 # Exercise the same launcher rollback used by the installed shortcut.
 $p = Start-Process $exe -ArgumentList '--rollback-smoke' -PassThru
 if (-not $p.WaitForExit(60000)) { $p.Kill(); throw 'Rollback timed out' }
 if ($p.ExitCode -ne 0) { throw 'Rollback failed' }
 $active = (Get-Content (Join-Path $install 'active-version.txt') -Raw).Trim()
-if ($active -ne '0.9.0-beta.0') { throw 'Rollback did not change launcher pointer' }
+if ($active -ne '0.9.0-beta.1') { throw 'Rollback did not change launcher pointer' }
 python (Join-Path $PSScriptRoot 'state_probe.py') check
 if ($LASTEXITCODE -ne 0) { throw 'Catalog state changed after rollback' }
 Copy-Item (Join-Path $evidence 'windows-home.png') (Join-Path $evidence 'previous-version.png')

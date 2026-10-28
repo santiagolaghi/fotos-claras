@@ -2,7 +2,7 @@
 
 Organizador fotográfico local para Windows. Interfaz Qt, catálogo SQLite,
 versiones para revisión, identidades corregibles, filtros combinados, álbumes
-virtuales y movimientos recuperables. **0.9.0-beta.1**, no versión estable.
+virtuales y movimientos recuperables. **0.9.0-beta.2**, no versión estable.
 
 La reconstrucción se encuentra en la rama `reconstruccion/editorial-0.9`.
 El workflow **Windows · pruebas e instalador beta** está configurado para

@@ -70,7 +70,7 @@ verificada + journal no sustituye backups físicos contra fallos de hardware.
 ## Resultados locales de esta entrega
 
 - Linux, Python 3.12, Qt 6.10.2, OpenCV 4.13.
-- 29 pruebas automatizadas nuevas aprobadas, con errores de callback Qt
+- 38 pruebas automatizadas nuevas aprobadas, con errores de callback Qt
   tratados como fallos de prueba.
 - Las 14 pruebas de la versión anterior pasaban antes de la reconstrucción;
   esto confirmó que no bastaban para demostrar los requisitos nuevos.
@@ -83,3 +83,28 @@ Fuentes técnicas: [SFace/YuNet](https://docs.opencv.org/4.12.0/d0/dd4/tutorial_
 [Qt model/view](https://doc.qt.io/qtforpython-6.10/PySide6/QtWidgets/QListView.html).
 Los umbrales de agrupación son decisiones conservadoras de esta app, no una
 garantía de precisión publicada por OpenCV.
+
+## Corrección de selección de carpeta · 0.9.0-beta.2
+
+- Se comprobó que el botón anterior invocaba el selector al simular su
+  respuesta, pero no se reprodujo el síntoma exacto del selector nativo en
+  Windows: la cuenta de GitHub sigue sin asignar un runner. No se atribuye
+  el reporte a una causa Windows que no se pudo observar.
+- Se reemplazó el selector estático nativo por un cuadro Qt no bloqueante,
+  con ruta editable, carpetas recientes, explorador Qt y errores dentro
+  del cuadro. La lectura y validación se realiza en segundo plano.
+- Pruebas reales del cuadro: abrir desde Inicio y cabecera, examinar,
+  pegar una ruta Unicode con espacios, cancelar, reintentar una ruta
+  inválida, detectar un archivo y gestionar denegación de acceso. Solo
+  la denegación y la demora se simulan para provocar esos errores.
+- Se reprodujo otro fallo: `PhotoView.mousePressEvent` reemplazaba el
+  control interno de QListView, y el doble clic no emitía `doubleClicked`.
+  Se corrigieron la activación por doble clic y por Enter y se agregó
+  una prueba que exige exactamente una activación por gesto.
+- `tools/verify_ui_real.py` recorre la interfaz con fotografías y modelos
+  reales: selección, análisis, galería, visor, apartar una copia, deshacer
+  en el historial, identificar personas, combinar filtros, crear un álbum
+  virtual y reiniciar. Son 15 comprobaciones a través de widgets y diálogos,
+  sin simular el resultado del selector de archivos.
+- Evidencia: `validation/ui-real-results.json`. Plataforma Linux/Qt
+  offscreen. No acredita prueba física en Windows ni del instalador.

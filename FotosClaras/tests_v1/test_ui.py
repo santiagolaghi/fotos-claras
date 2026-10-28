@@ -52,3 +52,12 @@ class QtFlow(unittest.TestCase):
                 time.sleep(.01);report('prueba',i,40)
         self.w.run(work);QTest.qWait(200);self.assertTrue(self.w.busy);self.w.cancel_job();QTest.qWait(200)
         self.assertFalse(self.w.busy);self.assertGreater(len(ticks),8);timer.stop()
+
+    def test_gallery_double_click_and_enter_activate_exactly_once(self):
+        from fotosclaras.widgets import PhotoView
+        view=PhotoView(self.w.thumbs);view.set_records(self.w.catalog.photos(self.library));view.show();QTest.qWait(80)
+        hits=[];view.doubleClicked.connect(lambda index:hits.append(index.row()))
+        rect=view.visualRect(view.model().index(0))
+        QTest.mouseClick(view.viewport(),Qt.LeftButton,Qt.NoModifier,rect.center())
+        QTest.mouseDClick(view.viewport(),Qt.LeftButton,Qt.NoModifier,rect.center())
+        self.assertEqual(hits,[0]);QTest.keyClick(view,Qt.Key_Return);self.assertEqual(hits,[0,0]);view.close()

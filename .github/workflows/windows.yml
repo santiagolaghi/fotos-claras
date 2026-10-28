@@ -27,6 +27,8 @@ jobs:
         run: python -m unittest discover -s tests_v1 -v
       - name: Fotografías reales y modelos reales
         run: python tools/verify_real.py
+      - name: Recorrido completo de interfaz con fotografías reales
+        run: python tools/verify_ui_real.py
       - name: Biblioteca de 10000 archivos reales redimensionados
         run: python tools/benchmark.py --files 10000
       - name: Capturas de todas las pantallas y tamaños
@@ -42,10 +44,10 @@ jobs:
       - name: Crear instaladores de prueba de actualización
         shell: pwsh
         run: |
-          & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' '/DAppVersion=0.9.0-beta.0' packaging/FotosClaras.iss
+          & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' '/DAppVersion=0.9.0-beta.1' packaging/FotosClaras.iss
           if ($LASTEXITCODE -ne 0) { throw 'Previous installer compilation failed' }
           Move-Item dist/Fotos-Claras-Setup.exe dist/Fotos-Claras-Previous-Setup.exe
-          & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' '/DAppVersion=0.9.0-beta.1' packaging/FotosClaras.iss
+          & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' '/DAppVersion=0.9.0-beta.2' packaging/FotosClaras.iss
           if ($LASTEXITCODE -ne 0) { throw 'Installer compilation failed' }
       - name: Instalar, abrir EXE, actualizar y recuperar
         shell: pwsh
@@ -64,7 +66,7 @@ jobs:
             build/FotosClaras/warn-FotosClaras.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: Fotos-Claras-Windows-0.9.0-beta.1
+          name: Fotos-Claras-Windows-0.9.0-beta.2
           path: |
             dist/Fotos-Claras-Setup.exe
             dist/Fotos-Claras-Setup.exe.sha256

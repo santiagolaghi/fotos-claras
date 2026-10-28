@@ -147,6 +147,21 @@ class PhotoView(QListView):
             self.clicked.emit(index);return
         super().mousePressEvent(event)
 
+    def mouseDoubleClickEvent(self,event):
+        # Our toggle-on-click handler does not populate QListView's private
+        # pressed-index state. Emit activation explicitly for the item under
+        # the pointer instead of relying on its default double-click handler.
+        index=self.indexAt(event.position().toPoint())
+        if event.button()==Qt.LeftButton and index.isValid():
+            self.selectionModel().setCurrentIndex(index,QItemSelectionModel.NoUpdate)
+            self.doubleClicked.emit(index);event.accept();return
+        super().mouseDoubleClickEvent(event)
+
+    def keyPressEvent(self,event):
+        if event.key() in (Qt.Key_Return,Qt.Key_Enter) and self.currentIndex().isValid():
+            self.doubleClicked.emit(self.currentIndex());event.accept();return
+        super().keyPressEvent(event)
+
 
 class ZoomView(QGraphicsView):
     def __init__(self,parent=None):

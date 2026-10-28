@@ -1,4 +1,4 @@
-# Fotos Claras 0.9.0-beta.1 · avance de reconstrucción
+# Fotos Claras 0.9.0-beta.2 · avance de reconstrucción
 
 Se reemplazó Tkinter por Qt y se implementó el estilo Álbum Editorial: marfil,
 verde oliva, títulos editoriales, mosaico con fotos propias, tarjetas y navegación
@@ -30,3 +30,14 @@ incluyen como una biblioteca del usuario.
 
 Consultar VERIFICACION.md para los límites y pendientes: Windows/DPI/hardware,
 colección familiar real, exportación auténtica WhatsApp, edad y perfiles.
+
+## Beta 2: carpeta y recorrido completo
+
+El selector permite Examinar o pegar una ruta. Los errores se muestran
+sin cerrar el cuadro; no se cambia la biblioteca si la validación falla
+o se cancela. El análisis sigue siendo una acción explícita.
+
+También se corrigió un fallo reproducido del doble clic que impedía abrir
+el visor y las fichas de personas. Pasaron 38 pruebas automatizadas y un
+recorrido con 15 comprobaciones de la UI sobre fotografías y modelos reales.
+El reintento de Windows siguió bloqueado antes de ejecutar pasos.
