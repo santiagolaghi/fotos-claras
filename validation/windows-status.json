@@ -1,16 +1,17 @@
 {
-  "source_commit": "f2085e274dea016a59b6c37518519535711520e6",
+  "source_commit": "a16f4df69c279ec50104e690ae2db1ac3be02a83",
   "branch": "reconstruccion/editorial-0.9",
   "pull_request": "https://github.com/santiagolaghi/fotos-claras/pull/1",
   "runs": [
     {
-      "id": 40594878187,
+      "id": 40817975081,
       "event": "push",
       "runner_assigned": false,
       "steps_executed": 0
     },
     {
-      "id": 40594951437,
+      "id": 40817977689,
+      "job_id": 123263485437,
       "event": "pull_request",
       "runner_assigned": false,
       "steps_executed": 0
@@ -21,11 +22,5 @@
   "windows_tests_verified": false,
   "windows_installer_generated": false,
   "stable_release": false,
-  "current_version": "0.9.0-beta.2",
-  "retry": {
-    "run_id": 40594951437,
-    "job_id": 122618962671,
-    "runner_assigned": false,
-    "steps_executed": 0
-  }
+  "current_version": "0.9.0-beta.3"
 }
