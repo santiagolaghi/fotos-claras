@@ -1,0 +1,59 @@
+This plugin does not support propagateSizeHints()
+OK: Elegir carpeta desde botón real
+OK: Elegir no inicia análisis
+OK: Analizar desde botón real
+OK: Galería cargada después del análisis
+This plugin does not support propagateSizeHints()
+OK: Visor real: imagen, navegación, ajuste, pantalla completa
+OK: Selección de una copia sugerida
+This plugin does not support propagateSizeHints()
+OK: Apartar con vista previa y confirmación
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+OK: Deshacer desde historial real
+OK: Modelos reales desde botón Buscar rostros
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+OK: Nombrar grupos desde Personas
+This plugin does not support propagateSizeHints()
+OK: Filtro UI: ambas personas, solo ellas, exactamente 2 rostros
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+OK: Crear álbum virtual y agregar desde diálogo real
+OK: Álbum virtual conserva ubicación física
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+OK: Composición y álbum inteligente desde diálogo real
+This plugin does not support propagateSizeHints()
+OK: Confirmar una identidad directamente desde la foto
+OK: Sin rostros en UI distingue análisis completado
+OK: Reinicio conserva nombres, fotos y álbum
+{
+  "platform": "linux",
+  "status": "passed",
+  "assertions": [
+    "Elegir carpeta desde botón real",
+    "Elegir no inicia análisis",
+    "Analizar desde botón real",
+    "Galería cargada después del análisis",
+    "Visor real: imagen, navegación, ajuste, pantalla completa",
+    "Selección de una copia sugerida",
+    "Apartar con vista previa y confirmación",
+    "Deshacer desde historial real",
+    "Modelos reales desde botón Buscar rostros",
+    "Nombrar grupos desde Personas",
+    "Filtro UI: ambas personas, solo ellas, exactamente 2 rostros",
+    "Crear álbum virtual y agregar desde diálogo real",
+    "Álbum virtual conserva ubicación física",
+    "Composición y álbum inteligente desde diálogo real",
+    "Confirmar una identidad directamente desde la foto",
+    "Sin rostros en UI distingue análisis completado",
+    "Reinicio conserva nombres, fotos y álbum"
+  ],
+  "photos": "Public face_recognition/OpenCV fixtures, not private family photos",
+  "mocked_file_picker": false,
+  "scope": "Actual Qt dialogs/widgets driven in offscreen mode; not a physical Windows desktop test"
+}

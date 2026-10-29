@@ -1,0 +1,17 @@
+{
+  "platform": "linux",
+  "faces": 20000,
+  "dimension": 128,
+  "named_people": 200,
+  "workload": "Synthetic unit embeddings: noisy known identities plus independent unknowns; no measured family-photo recognition accuracy",
+  "grouping_seconds": 3.479,
+  "known_assignments_correct": 12933,
+  "known_assignments_total": 12933,
+  "page_size": 240,
+  "page_query_seconds": 0.0013,
+  "gallery_during_analysis_seconds": 1.919,
+  "worker_separate_process": true,
+  "ui_timer_samples": 549,
+  "ui_gap_max_ms": 30.01,
+  "ui_gap_p95_ms": 10.75
+}

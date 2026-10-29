@@ -1,6 +1,13 @@
-__pycache__/
-*.py[cod]
 .venv/
-dist/
-build/
+__pycache__/
+*.pyc
 *.spec
+build/
+dist/
+validation/real/
+validation/models/
+validation/screenshots/
+validation/installed/
+*.sqlite3*
+FotosClaras/windows-home.png
+packaging/FotosClarasLauncher.exe

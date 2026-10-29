@@ -1,0 +1,144 @@
+test_16bit_samples_not_collapsed_by_rgb_conversion (test_catalog.CatalogFlow.test_16bit_samples_not_collapsed_by_rgb_conversion) ... ok
+test_backup_and_schema_version (test_catalog.CatalogFlow.test_backup_and_schema_version) ... ok
+test_boolean_filters_unknown_faces_and_album (test_catalog.CatalogFlow.test_boolean_filters_unknown_faces_and_album) ... ok
+test_cached_face_results_do_not_restart_models (test_catalog.CatalogFlow.test_cached_face_results_do_not_restart_models) ... ok
+test_cancel_move_resume_and_no_photo_loss (test_catalog.CatalogFlow.test_cancel_move_resume_and_no_photo_loss) ... ok
+test_cannot_merge_cooccurring_people (test_catalog.CatalogFlow.test_cannot_merge_cooccurring_people) ... ok
+test_copy_undo_is_recoverable (test_catalog.CatalogFlow.test_copy_undo_is_recoverable) ... ok
+test_corrupt_is_error_not_zero_faces (test_catalog.CatalogFlow.test_corrupt_is_error_not_zero_faces) ... ok
+test_crash_after_copy_before_delete_and_resume (test_catalog.CatalogFlow.test_crash_after_copy_before_delete_and_resume) ... ok
+test_crash_after_intent_before_copy_retries_safely (test_catalog.CatalogFlow.test_crash_after_intent_before_copy_retries_safely) ... ok
+test_destination_appearing_after_plan_and_modified_undo (test_catalog.CatalogFlow.test_destination_appearing_after_plan_and_modified_undo) ... ok
+test_exact_pixels_metadata_and_alpha_and_sequence (test_catalog.CatalogFlow.test_exact_pixels_metadata_and_alpha_and_sequence) ... ok
+test_face_errors_are_not_no_faces (test_catalog.CatalogFlow.test_face_errors_are_not_no_faces) ... ok
+test_import_legacy_move_history_and_undo (test_catalog.CatalogFlow.test_import_legacy_move_history_and_undo) ... ok
+test_incremental_and_restart (test_catalog.CatalogFlow.test_incremental_and_restart) ... ok
+test_legacy_import_preserves_names_and_files (test_catalog.CatalogFlow.test_legacy_import_preserves_names_and_files) ... ok
+test_move_preview_collision_undo_and_identity (test_catalog.CatalogFlow.test_move_preview_collision_undo_and_identity) ... ok
+test_name_split_veto_merge_ignore_restart (test_catalog.CatalogFlow.test_name_split_veto_merge_ignore_restart) ... ok
+test_overlapping_libraries_keep_independent_catalogs (test_catalog.CatalogFlow.test_overlapping_libraries_keep_independent_catalogs) ... ok
+test_pause_does_not_mark_unvisited_missing (test_catalog.CatalogFlow.test_pause_does_not_mark_unvisited_missing) ... ok
+test_quarantine_undo_excludes_without_disappearing_identity (test_catalog.CatalogFlow.test_quarantine_undo_excludes_without_disappearing_identity) ... ok
+test_cancel_during_validation_does_not_apply_late_result (test_folders.FolderFlow.test_cancel_during_validation_does_not_apply_late_result) ... This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+ok
+test_cancel_preserves_library_and_last_folder (test_folders.FolderFlow.test_cancel_preserves_library_and_last_folder) ... This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+ok
+test_header_choose_real_dialog_paste_scan_gallery_and_restart (test_folders.FolderFlow.test_header_choose_real_dialog_paste_scan_gallery_and_restart) ... This plugin does not support propagateSizeHints()
+ok
+test_invalid_and_file_path_stay_visible_then_retry (test_folders.FolderFlow.test_invalid_and_file_path_stay_visible_then_retry) ... This plugin does not support propagateSizeHints()
+Traceback (most recent call last):
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/dialogs.py", line 26, in validate_directory
+    path = Path(os.path.expandvars(value)).expanduser().resolve(strict=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1240, in resolve
+    s = self._flavour.realpath(self, strict=strict)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen posixpath>", line 424, in realpath
+  File "<frozen posixpath>", line 468, in _joinrealpath
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmphf3cu49s/inexistente'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/widgets.py", line 35, in run
+    try: self.signals.finished.emit(self.fn(self.report))
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 97, in <lambda>
+    self.progress.setRange(0,0);self.task=Task(lambda report:fn(self.cancel,report));self.task.signals.progress.connect(self.on_progress)
+                                                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 158, in validate
+    return validate_directory(path,cancel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/dialogs.py", line 32, in validate_directory
+    raise ValueError('No encontramos esa carpeta. Revisá la ruta y que el disco esté conectado.') from exc
+ValueError: No encontramos esa carpeta. Revisá la ruta y que el disco esté conectado.
+
+Traceback (most recent call last):
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/widgets.py", line 35, in run
+    try: self.signals.finished.emit(self.fn(self.report))
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 97, in <lambda>
+    self.progress.setRange(0,0);self.task=Task(lambda report:fn(self.cancel,report));self.task.signals.progress.connect(self.on_progress)
+                                                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 158, in validate
+    return validate_directory(path,cancel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/dialogs.py", line 28, in validate_directory
+    raise ValueError('Esa ruta corresponde a un archivo. Elegí la carpeta que contiene tus fotos.')
+ValueError: Esa ruta corresponde a un archivo. Elegí la carpeta que contiene tus fotos.
+
+ok
+test_permission_error_is_inline_not_silent (test_folders.FolderFlow.test_permission_error_is_inline_not_silent) ... This plugin does not support propagateSizeHints()
+Traceback (most recent call last):
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/dialogs.py", line 29, in validate_directory
+    with os.scandir(path) as entries:
+         ^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+PermissionError: denied
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/widgets.py", line 35, in run
+    try: self.signals.finished.emit(self.fn(self.report))
+                                    ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 97, in <lambda>
+    self.progress.setRange(0,0);self.task=Task(lambda report:fn(self.cancel,report));self.task.signals.progress.connect(self.on_progress)
+                                                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 158, in validate
+    return validate_directory(path,cancel)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/dialogs.py", line 34, in validate_directory
+    raise ValueError('No hay permiso para leer esa carpeta. Elegí otra o revisá sus permisos en Windows.') from exc
+ValueError: No hay permiso para leer esa carpeta. Elegí otra o revisá sus permisos en Windows.
+
+ok
+test_quoted_and_empty_paths (test_folders.FolderFlow.test_quoted_and_empty_paths) ... ok
+test_real_browser_selects_folder_and_timers_continue (test_folders.FolderFlow.test_real_browser_selects_folder_and_timers_continue) ... This plugin does not support propagateSizeHints()
+This plugin does not support propagateSizeHints()
+This plugin does not support raise()
+This plugin does not support grabbing the keyboard
+ok
+test_welcome_button_opens_visible_picker (test_folders.FolderFlow.test_welcome_button_opens_visible_picker) ... This plugin does not support propagateSizeHints()
+ok
+test_ambiguous_people_do_not_become_confident_identity (test_identity_v2.IdentityFlow.test_ambiguous_people_do_not_become_confident_identity) ... ok
+test_confirmed_identity_is_available_in_other_library (test_identity_v2.IdentityFlow.test_confirmed_identity_is_available_in_other_library) ... ok
+test_diverse_references_include_late_confirmed_appearance (test_identity_v2.IdentityFlow.test_diverse_references_include_late_confirmed_appearance) ... ok
+test_large_portrait_tiles_leave_no_unexamined_middle (test_identity_v2.IdentityFlow.test_large_portrait_tiles_leave_no_unexamined_middle) ... ok
+test_live_album_compositions_update_after_new_confirmations (test_identity_v2.IdentityFlow.test_live_album_compositions_update_after_new_confirmations) ... ok
+test_low_quality_face_counts_as_third_without_auto_identity (test_identity_v2.IdentityFlow.test_low_quality_face_counts_as_third_without_auto_identity) ... ok
+test_paginated_query_has_stable_order_and_no_large_fingerprints (test_identity_v2.IdentityFlow.test_paginated_query_has_stable_order_and_no_large_fingerprints) ... ok
+test_probable_match_confirmation_teaches_remaining_faces (test_identity_v2.IdentityFlow.test_probable_match_confirmation_teaches_remaining_faces) ... ok
+test_redetection_preserves_ids_names_and_negative_corrections (test_identity_v2.IdentityFlow.test_redetection_preserves_ids_names_and_negative_corrections) ... ok
+test_rejection_and_split_survive_search_and_restart (test_identity_v2.IdentityFlow.test_rejection_and_split_survive_search_and_restart) ... ok
+test_renaming_does_not_promote_automatic_matches_to_references (test_identity_v2.IdentityFlow.test_renaming_does_not_promote_automatic_matches_to_references) ... ok
+test_schema_upgrade_retains_old_data_and_backup (test_identity_v2.IdentityFlow.test_schema_upgrade_retains_old_data_and_backup) ... ok
+test_all_sections_resize_persistence_no_auto_scan (test_ui.QtFlow.test_all_sections_resize_persistence_no_auto_scan) ... ok
+test_background_job_keeps_event_loop_responsive (test_ui.QtFlow.test_background_job_keeps_event_loop_responsive) ... ok
+test_cancel_spawned_analysis_preserves_catalog (test_ui.QtFlow.test_cancel_spawned_analysis_preserves_catalog) ... ok
+test_gallery_click_multiselect_and_viewer (test_ui.QtFlow.test_gallery_click_multiselect_and_viewer) ... This plugin does not support propagateSizeHints()
+ok
+test_gallery_double_click_and_enter_activate_exactly_once (test_ui.QtFlow.test_gallery_double_click_and_enter_activate_exactly_once) ... ok
+test_real_spawned_analysis_keeps_navigation_responsive (test_ui.QtFlow.test_real_spawned_analysis_keeps_navigation_responsive) ... ok
+test_review_dialog_confirms_a_probable_face_through_real_widgets (test_ui.QtFlow.test_review_dialog_confirms_a_probable_face_through_real_widgets) ... This plugin does not support propagateSizeHints()
+ok
+test_slow_catalog_query_never_blocks_event_loop_or_replaces_new_page (test_ui.QtFlow.test_slow_catalog_query_never_blocks_event_loop_or_replaces_new_page) ... ok
+test_model_checksum_and_cache (test_updates.Updates.test_model_checksum_and_cache) ... ok
+test_other_repository_rejected_before_network (test_updates.Updates.test_other_repository_rejected_before_network) ... ok
+test_release_selects_verified_asset (test_updates.Updates.test_release_selects_verified_asset) ... ok
+test_stable_vs_beta_order_and_missing_package (test_updates.Updates.test_stable_vs_beta_order_and_missing_package) ... ok
+test_verified_download_corruption_and_cancel_cleanup (test_updates.Updates.test_verified_download_corruption_and_cancel_cleanup) ... ok
+
+----------------------------------------------------------------------
+Ran 54 tests in 14.048s
+
+OK
