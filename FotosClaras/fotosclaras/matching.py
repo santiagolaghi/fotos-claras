@@ -1,6 +1,7 @@
 """Hashes select candidates; detail comparisons only suggest manual review."""
 import numpy as np
 from .imaging import open_rgb,RESAMPLE
+from .db import PHOTO_FIELDS
 
 class BKTree:
     def __init__(self): self.root=None
@@ -41,7 +42,7 @@ def version_score(a,b):
 def exact_groups(catalog,library):
     groups=catalog.rows('''SELECT raster,COUNT(*) n FROM photos WHERE library_id=?
         AND state='active' AND error IS NULL GROUP BY raster HAVING COUNT(*)>1 ORDER BY n DESC''',(library,))
-    return [catalog.rows('''SELECT * FROM photos WHERE library_id=? AND raster=?
+    return [catalog.rows('SELECT '+','.join(PHOTO_FIELDS)+''' FROM photos WHERE library_id=? AND raster=?
         AND state='active' AND error IS NULL ORDER BY width*height DESC,size DESC,path''',(library,g['raster'])) for g in groups]
 
 

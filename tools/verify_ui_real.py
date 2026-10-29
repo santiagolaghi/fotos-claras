@@ -18,7 +18,7 @@ from fotosclaras.widgets import Viewer
 from fotosclaras.identity import ensure_models
 from real_fixtures import download
 
-app=QApplication.instance() or QApplication([])
+app=None
 results=[];errors=[];watchers=[]
 sys.excepthook=lambda *e:errors.append(str(e[1]))
 
@@ -64,6 +64,8 @@ def yes(dialog):
 
 
 def run():
+    global app
+    app=QApplication.instance() or QApplication([])
     fixtures=download(ROOT/'validation/real');ensure_models(ROOT/'validation/models')
     screenshots=ROOT/'validation/screenshots';screenshots.mkdir(parents=True,exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
@@ -82,7 +84,7 @@ def run():
         check('Elegir no inicia análisis',w.catalog.one('SELECT COUNT(*) n FROM jobs')['n']==0)
         QTest.mouseClick(w.scan_button,Qt.LeftButton);wait(lambda:not w.busy)
         library=w.library['id'];check('Analizar desde botón real',len(w.catalog.photos(library))==7)
-        QTest.mouseClick(w.nav[1],Qt.LeftButton);QTest.qWait(100)
+        QTest.mouseClick(w.nav[1],Qt.LeftButton);wait(lambda:w.current_grid is not None)
         check('Galería cargada después del análisis',len(w.current_grid.records())==7)
         def inspect_viewer(dialog):
             assert isinstance(dialog,Viewer)
@@ -95,7 +97,7 @@ def run():
         view=w.current_grid;QTest.mouseDClick(view.viewport(),Qt.LeftButton,Qt.NoModifier,view.visualRect(view.model().index(0)).center())
         wait(lambda:armed['done']);check('Visor real: imagen, navegación, ajuste, pantalla completa',True)
         # Quarantine only the duplicate, then undo using the actual history dialogs.
-        QTest.mouseClick(w.nav[2],Qt.LeftButton);QTest.qWait(100);click(w,'Seleccionar copias sugeridas')
+        QTest.mouseClick(w.nav[2],Qt.LeftButton);wait(lambda:w.current_grid is not None);click(w,'Seleccionar copias sugeridas')
         chosen=w.selected();check('Selección de una copia sugerida',len(chosen)==1)
         selected_path=Path(chosen[0]['path'])
         armed=arm('Revisá exactamente qué ocurrirá',lambda d:QTest.mouseClick(d.findChild(QDialogButtonBox).button(QDialogButtonBox.Ok),Qt.LeftButton))
@@ -114,23 +116,25 @@ def run():
             return w.catalog.one('SELECT f.person_id FROM faces f JOIN photos p ON p.id=f.photo_id WHERE p.path=?',(str(photos/filename),))['person_id']
         a,b=person_for('obama.jpg'),person_for('biden.jpg')
         for person,name in [(a,'Persona A'),(b,'Persona B')]:
-            QTest.mouseClick(w.nav[4],Qt.LeftButton);QTest.qWait(60)
+            QTest.mouseClick(w.nav[4],Qt.LeftButton);wait(lambda:w.current_grid is not None)
             view=w.current_grid;row=next(i for i,p in enumerate(view.records()) if p['id']==person)
             def identify(dialog,name=name):
                 field=dialog.findChild(QLineEdit);field.setText(name)
+                wait(lambda:dialog.save.isEnabled())
                 click(dialog,'Guardar nombre y buscar más coincidencias')
             armed=arm('¿Quién es esta persona?',identify)
             QTest.mouseDClick(view.viewport(),Qt.LeftButton,Qt.NoModifier,view.visualRect(view.model().index(row)).center())
             wait(lambda:armed['done'] and not w.busy)
         check('Nombrar grupos desde Personas',w.catalog.one('SELECT COUNT(*) n FROM people WHERE name<>\'\'')['n']==2)
-        QTest.mouseClick(w.nav[1],Qt.LeftButton);QTest.qWait(60)
+        QTest.mouseClick(w.nav[1],Qt.LeftButton);wait(lambda:w.current_grid is not None)
         def filter_pair(dialog):
             include=dialog.findChildren(QListWidget)[0]
+            wait(lambda:include.count()==2)
             for i in range(include.count()):
                 if include.item(i).data(Qt.UserRole) in (a,b):include.item(i).setCheckState(Qt.Checked)
             mode,count=dialog.findChildren(QComboBox);mode.setCurrentIndex(1);count.setCurrentIndex(3)
             click(dialog,'Ver fotografías')
-        armed=arm('Encontrá a tus personas',filter_pair);click(w,'Filtrar personas y rostros');wait(lambda:armed['done'])
+        armed=arm('Encontrá a tus personas',filter_pair);click(w,'Filtrar personas y rostros');wait(lambda:armed['done'] and w.current_grid is not None)
         check('Filtro UI: ambas personas, solo ellas, exactamente 2 rostros',len(w.current_grid.records())==1 and Path(w.current_grid.records()[0]['path']).name=='two_people.jpg')
         w.grab().save(str(screenshots/'real-filter-pair.png'))
         w.current_grid.selectAll()
@@ -144,11 +148,34 @@ def run():
         album=w.catalog.one('SELECT id FROM albums WHERE name=?',('Álbum de prueba',))
         check('Crear álbum virtual y agregar desde diálogo real',bool(album) and len(w.catalog.photos(library,album=album['id']))==1)
         check('Álbum virtual conserva ubicación física',(photos/'two_people.jpg').is_file())
-        QTest.mouseClick(w.nav[6],Qt.LeftButton);QTest.qWait(50)
+        # The person-composition dialog creates a live rule, without copying files.
+        def composition(dialog):
+            for i in range(dialog.list.count()):dialog.list.item(i).setCheckState(Qt.Checked)
+            wait(lambda:dialog.rows['only'][1].isEnabled())
+            assert '1 fotos' in dialog.rows['only'][0].text()
+            def title(d):d.setTextValue('Pareja · inteligente');d.accept()
+            arm('Álbum inteligente',title)
+            QTest.mouseClick(dialog.rows['only'][2],Qt.LeftButton)
+            wait(lambda:'creado' in dialog.message.text())
+            dialog.grab().save(str(screenshots/'people-composition.png'))
+            QTest.mouseClick(dialog.rows['only'][1],Qt.LeftButton)
+        wait(lambda:w.current_grid is not None)
+        armed=arm('Organizar por personas',composition);click(w,'Organizar por personas');wait(lambda:armed['done'] and w.current_grid is not None)
+        smart=w.catalog.one('SELECT id,rule FROM albums WHERE name=?',('Pareja · inteligente',))
+        check('Composición y álbum inteligente desde diálogo real',bool(smart['rule']) and w.catalog.photo_count(library,album=smart['id'])==1)
+        w.current_grid.selectAll()
+        def identify_photo(dialog):
+            wait(lambda:len(dialog.grid.records())==2 and dialog.confirm.isEnabled())
+            face=dialog.grid.records()[0];dialog.grid.selectionModel().select(dialog.grid.model().index(0),__import__('PySide6.QtCore',fromlist=['QItemSelectionModel']).QItemSelectionModel.Select)
+            dialog.person.setCurrentText(face['name']);QTest.mouseClick(dialog.confirm,Qt.LeftButton)
+        armed=arm('Identificar rostros de esta foto',identify_photo)
+        click(w,'Identificar rostros de la foto seleccionada');wait(lambda:armed['done'] and not w.busy)
+        check('Confirmar una identidad directamente desde la foto',True)
+        QTest.mouseClick(w.nav[6],Qt.LeftButton);wait(lambda:w.current_grid is not None)
         check('Sin rostros en UI distingue análisis completado',len(w.current_grid.records())==1 and Path(w.current_grid.records()[0]['path']).name=='scenery.jpg')
-        w.close();w=MainWindow(path);w.show();QTest.qWait(100)
+        w.close();wait(lambda:w._closed);w=MainWindow(path);w.show();QTest.qWait(100)
         check('Reinicio conserva nombres, fotos y álbum',not w.busy and len(w.catalog.people(library))==2 and len(w.catalog.photos(library,album=album['id']))==1)
-        w.close();QTest.qWait(100)
+        w.close();wait(lambda:w._closed)
     assert not errors,errors
     report=dict(platform=sys.platform,status='passed',assertions=results,photos='Public face_recognition/OpenCV fixtures, not private family photos',mocked_file_picker=False,scope='Actual Qt dialogs/widgets driven in offscreen mode; not a physical Windows desktop test')
     (ROOT/'validation/ui-real-results.json').write_text(json.dumps(report,indent=2,ensure_ascii=False))

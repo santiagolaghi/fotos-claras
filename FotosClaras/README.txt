@@ -1,7 +1,10 @@
-FOTOS CLARAS 0.9.0-beta.2 · ALBUM EDITORIAL
+FOTOS CLARAS 0.9.0-beta.3 · ALBUM EDITORIAL
 
 INSTALACION WINDOWS
-Usa Fotos-Claras-Setup.exe, generado por el workflow Windows del repositorio.
+El instalador EXE depende de completar el workflow Windows; aun no se entrega
+como un instalador verificado. Este paquete contiene codigo y pruebas.
+Para ejecutarlo desde codigo, usa INSTALAR.bat y luego ABRIR.bat (Python 3.12).
+Cuando exista, Fotos-Claras-Setup.exe sera generado por el workflow del repositorio.
 Instala y abre Fotos Claras desde el acceso directo. No necesita Python.
 Esta version es beta: consultar docs/VERIFICACION.md para evidencia y limites.
 
@@ -14,6 +17,21 @@ PRIMER USO
 4. En Personas, doble clic en un grupo: revisa los rostros y guarda el nombre.
 5. Galeria > Filtrar permite incluir/excluir personas y buscar solo ellas o con otras.
 6. Selecciona fotografias (un clic marca, doble clic amplia) y toca Organizar.
+
+MEJORAS BETA 3
+Al actualizar, toca Buscar rostros una vez para aplicar la deteccion multiescala
+a las fotos guardadas con el detector anterior. Conserva nombres y correcciones.
+El agrupamiento usa las confirmaciones como referencia. En la ficha de una
+persona, Posibles coincidencias permite confirmar o rechazar rostros dudosos.
+Para un rostro que no figura entre las sugerencias: selecciona su foto en Galeria,
+toca Identificar rostros, elige el rostro y confirma la persona existente.
+Esa referencia se usa en la busqueda siguiente. No hace falta repetir el nombre.
+
+Organizar por personas ofrece solo las elegidas, con terceros o todas juntas.
+Crear album guarda una regla que se actualiza al reconocer fotos nuevas. Es
+virtual: no copia ni mueve originales. Terceros incluye rostros sin identificar.
+Las paginas limitan la memoria; Organizar todos los resultados incluye el filtro
+completo, con vista previa y confirmacion antes de cualquier copia o movimiento.
 
 Un album virtual conserva cada archivo en su ubicacion. Copiar conserva el
 original y crea otro archivo. Mover cambia su carpeta real. La vista previa
@@ -42,6 +60,9 @@ SHA-256 antes de ejecutar el instalador. Cada version se instala separadamente;
 la anterior queda disponible en Inicio > Volver a la version anterior.
 No se modifica la carpeta de fotografias ni la base local al instalar.
 Los modelos y fotos se procesan localmente; no requiere una API GPT.
+La beta 3 actualiza el esquema a v2 y conserva un respaldo before-v2 del catalogo
+previo. Las betas 1 y 2 no pueden abrir ese esquema. No reemplaces la base nueva
+por el respaldo sin revisar: las correcciones posteriores solo estan en la nueva.
 
 CODIGO FUENTE (alternativa para desarrollo)
 Necesita Python 3.12 de 64 bits: ejecutar INSTALAR.bat, luego ABRIR.bat.

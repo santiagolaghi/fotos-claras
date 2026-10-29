@@ -7,9 +7,9 @@
     "two_people.jpg": 2,
     "scenery.jpg": 0
   },
-  "cosine_same_person": 0.743654727935791,
-  "cosine_different_people": 0.08499418199062347,
-  "elapsed_seconds": 2.013,
+  "cosine_same_person": 0.7086768746376038,
+  "cosine_different_people": 0.04843456670641899,
+  "elapsed_seconds": 2.837,
   "assertions": [
     "exact copy",
     "simulated WhatsApp compression (resize/JPEG, not actual WhatsApp export)",

@@ -4,6 +4,7 @@ os.environ.setdefault('QT_QPA_PLATFORM','offscreen')
 import shutil
 import sys
 import tempfile
+import time
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'FotosClaras'))
 from PySide6.QtWidgets import QApplication
@@ -26,6 +27,10 @@ with tempfile.TemporaryDirectory() as tmp:
     for size in [(1440,900),(1000,700)]:
         w.resize(*size)
         for n in range(8):
-            w.navigate(n);QTest.qWait(250);w.grab().save(str(out/f'{size[0]}-{n}.png'))
+            w.navigate(n);deadline=time.monotonic()+15
+            while w.rendered_generation!=w._generation and time.monotonic()<deadline:QTest.qWait(15)
+            assert w.rendered_generation==w._generation,'La vista no terminó de cargar'
+            QTest.qWait(150);w.grab().save(str(out/f'{size[0]}-{n}.png'))
     w.close()
+    while not w._closed:QTest.qWait(15)
 print(out)

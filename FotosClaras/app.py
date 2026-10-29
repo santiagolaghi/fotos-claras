@@ -2,6 +2,7 @@
 import os
 import sys
 import logging
+import multiprocessing
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from fotosclaras.db import data_dir
@@ -31,4 +32,6 @@ def main():
         QTimer.singleShot(1500,finish)
     code=app.exec();lock.unlock();return code
 
-if __name__=='__main__':sys.exit(main())
+if __name__=='__main__':
+    multiprocessing.freeze_support()
+    sys.exit(main())

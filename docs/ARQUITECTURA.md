@@ -1,5 +1,8 @@
 # Arquitectura 0.9 beta
 
+La implementación vigente es beta 3. Sus cambios en procesos, agrupamiento,
+paginación y esquema v2 se detallan en [CAMBIOS-beta-3.md](CAMBIOS-beta-3.md).
+
 - `fotosclaras/db.py`: esquema versionado, bibliotecas, fotos, rostros, personas,
   restricciones, álbumes virtuales, trabajos, operaciones y preferencias. Una
   conexión SQLite por hilo, WAL, claves externas y sincronización FULL.

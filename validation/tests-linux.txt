@@ -37,18 +37,18 @@ Traceback (most recent call last):
         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "<frozen posixpath>", line 424, in realpath
   File "<frozen posixpath>", line 468, in _joinrealpath
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpbwf6vdwn/inexistente'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmphf3cu49s/inexistente'
 
 The above exception was the direct cause of the following exception:
 
 Traceback (most recent call last):
-  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/widgets.py", line 29, in run
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/widgets.py", line 35, in run
     try: self.signals.finished.emit(self.fn(self.report))
                                     ^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 91, in <lambda>
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 97, in <lambda>
     self.progress.setRange(0,0);self.task=Task(lambda report:fn(self.cancel,report));self.task.signals.progress.connect(self.on_progress)
                                                              ^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 139, in validate
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 158, in validate
     return validate_directory(path,cancel)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/dialogs.py", line 32, in validate_directory
@@ -56,13 +56,13 @@ Traceback (most recent call last):
 ValueError: No encontramos esa carpeta. Revisá la ruta y que el disco esté conectado.
 
 Traceback (most recent call last):
-  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/widgets.py", line 29, in run
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/widgets.py", line 35, in run
     try: self.signals.finished.emit(self.fn(self.report))
                                     ^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 91, in <lambda>
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 97, in <lambda>
     self.progress.setRange(0,0);self.task=Task(lambda report:fn(self.cancel,report));self.task.signals.progress.connect(self.on_progress)
                                                              ^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 139, in validate
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 158, in validate
     return validate_directory(path,cancel)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/dialogs.py", line 28, in validate_directory
@@ -88,13 +88,13 @@ PermissionError: denied
 The above exception was the direct cause of the following exception:
 
 Traceback (most recent call last):
-  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/widgets.py", line 29, in run
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/widgets.py", line 35, in run
     try: self.signals.finished.emit(self.fn(self.report))
                                     ^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 91, in <lambda>
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 97, in <lambda>
     self.progress.setRange(0,0);self.task=Task(lambda report:fn(self.cancel,report));self.task.signals.progress.connect(self.on_progress)
                                                              ^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 139, in validate
+  File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/ui.py", line 158, in validate
     return validate_directory(path,cancel)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/workspace/scratch/27d79e0eb603/fotos-claras/FotosClaras/fotosclaras/dialogs.py", line 34, in validate_directory
@@ -110,11 +110,28 @@ This plugin does not support grabbing the keyboard
 ok
 test_welcome_button_opens_visible_picker (test_folders.FolderFlow.test_welcome_button_opens_visible_picker) ... This plugin does not support propagateSizeHints()
 ok
+test_ambiguous_people_do_not_become_confident_identity (test_identity_v2.IdentityFlow.test_ambiguous_people_do_not_become_confident_identity) ... ok
+test_confirmed_identity_is_available_in_other_library (test_identity_v2.IdentityFlow.test_confirmed_identity_is_available_in_other_library) ... ok
+test_diverse_references_include_late_confirmed_appearance (test_identity_v2.IdentityFlow.test_diverse_references_include_late_confirmed_appearance) ... ok
+test_large_portrait_tiles_leave_no_unexamined_middle (test_identity_v2.IdentityFlow.test_large_portrait_tiles_leave_no_unexamined_middle) ... ok
+test_live_album_compositions_update_after_new_confirmations (test_identity_v2.IdentityFlow.test_live_album_compositions_update_after_new_confirmations) ... ok
+test_low_quality_face_counts_as_third_without_auto_identity (test_identity_v2.IdentityFlow.test_low_quality_face_counts_as_third_without_auto_identity) ... ok
+test_paginated_query_has_stable_order_and_no_large_fingerprints (test_identity_v2.IdentityFlow.test_paginated_query_has_stable_order_and_no_large_fingerprints) ... ok
+test_probable_match_confirmation_teaches_remaining_faces (test_identity_v2.IdentityFlow.test_probable_match_confirmation_teaches_remaining_faces) ... ok
+test_redetection_preserves_ids_names_and_negative_corrections (test_identity_v2.IdentityFlow.test_redetection_preserves_ids_names_and_negative_corrections) ... ok
+test_rejection_and_split_survive_search_and_restart (test_identity_v2.IdentityFlow.test_rejection_and_split_survive_search_and_restart) ... ok
+test_renaming_does_not_promote_automatic_matches_to_references (test_identity_v2.IdentityFlow.test_renaming_does_not_promote_automatic_matches_to_references) ... ok
+test_schema_upgrade_retains_old_data_and_backup (test_identity_v2.IdentityFlow.test_schema_upgrade_retains_old_data_and_backup) ... ok
 test_all_sections_resize_persistence_no_auto_scan (test_ui.QtFlow.test_all_sections_resize_persistence_no_auto_scan) ... ok
 test_background_job_keeps_event_loop_responsive (test_ui.QtFlow.test_background_job_keeps_event_loop_responsive) ... ok
+test_cancel_spawned_analysis_preserves_catalog (test_ui.QtFlow.test_cancel_spawned_analysis_preserves_catalog) ... ok
 test_gallery_click_multiselect_and_viewer (test_ui.QtFlow.test_gallery_click_multiselect_and_viewer) ... This plugin does not support propagateSizeHints()
 ok
 test_gallery_double_click_and_enter_activate_exactly_once (test_ui.QtFlow.test_gallery_double_click_and_enter_activate_exactly_once) ... ok
+test_real_spawned_analysis_keeps_navigation_responsive (test_ui.QtFlow.test_real_spawned_analysis_keeps_navigation_responsive) ... ok
+test_review_dialog_confirms_a_probable_face_through_real_widgets (test_ui.QtFlow.test_review_dialog_confirms_a_probable_face_through_real_widgets) ... This plugin does not support propagateSizeHints()
+ok
+test_slow_catalog_query_never_blocks_event_loop_or_replaces_new_page (test_ui.QtFlow.test_slow_catalog_query_never_blocks_event_loop_or_replaces_new_page) ... ok
 test_model_checksum_and_cache (test_updates.Updates.test_model_checksum_and_cache) ... ok
 test_other_repository_rejected_before_network (test_updates.Updates.test_other_repository_rejected_before_network) ... ok
 test_release_selects_verified_asset (test_updates.Updates.test_release_selects_verified_asset) ... ok
@@ -122,6 +139,6 @@ test_stable_vs_beta_order_and_missing_package (test_updates.Updates.test_stable_
 test_verified_download_corruption_and_cancel_cleanup (test_updates.Updates.test_verified_download_corruption_and_cancel_cleanup) ... ok
 
 ----------------------------------------------------------------------
-Ran 38 tests in 8.656s
+Ran 54 tests in 14.048s
 
 OK

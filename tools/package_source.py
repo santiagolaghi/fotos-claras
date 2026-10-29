@@ -1,6 +1,7 @@
 """Package reviewed source and local verification evidence; never include user photos/state."""
 import hashlib
 import json
+import runpy
 import subprocess
 import sys
 import zipfile
@@ -17,12 +18,13 @@ for path in files:
     if any(word in rel.split('/') for word in ('.git','upload','real','models','__pycache__')):raise ValueError('Ruta excluida: '+rel)
     if path.suffix in ('.sqlite3','.onnx','.exe'):raise ValueError('Estado/binario no permitido: '+rel)
     manifest.append(dict(path=rel,size=path.stat().st_size,sha256=hashlib.sha256(path.read_bytes()).hexdigest()))
-base='Fotos-Claras-0.9.0-beta.2/'
+version=runpy.run_path(str(ROOT/'FotosClaras/fotosclaras/__init__.py'))['__version__']
+base=f'Fotos-Claras-{version}/'
 with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as z:
     for path in files:z.write(path,base+path.relative_to(ROOT).as_posix())
     z.writestr(base+'MANIFEST.json',json.dumps(manifest,indent=2,ensure_ascii=False))
     z.writestr(base+'EMPEZAR.txt',
-       'FOTOS CLARAS 0.9.0-beta.2 - CODIGO Y PRUEBAS\n\n'
+       f'FOTOS CLARAS {version} - CODIGO Y PRUEBAS\n\n'
        'No es un instalador EXE Windows ya verificado.\n'
        'Lee docs/ENTREGA.md y docs/VERIFICACION.md.\n'
        'Alternativa de desarrollo: FotosClaras/INSTALAR.bat, luego ABRIR.bat.\n'

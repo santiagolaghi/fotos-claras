@@ -41,6 +41,9 @@ QProgressBar::chunk { background:#899566; border-radius:4px; }
 QHeaderView::section { background:#f1eee6; border:0; padding:9px; }
 QSplitter::handle { background:#e4e1d8; }
 QCheckBox { spacing:8px; }
+QTabWidget::pane { border:1px solid #e2ded4; border-radius:8px; }
+QTabBar::tab { background:#eeeae1; padding:10px 18px; border-radius:5px; margin:3px; }
+QTabBar::tab:selected { background:#e1e5d3; color:#3d4829; }
 QToolTip { background:#fffdf9; border:1px solid #c9cbbd; padding:5px; }
 '''
 PATHS={

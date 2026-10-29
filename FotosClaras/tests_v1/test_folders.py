@@ -38,7 +38,7 @@ class FolderFlow(unittest.TestCase):
     def tearDown(self):
         if self.w.busy:
             self.w.cancel_job();until(lambda:not self.w.busy)
-        self.w.close();QTest.qWait(100);sys.excepthook=self.old_hook
+        self.w.close();until(lambda:self.w._closed);sys.excepthook=self.old_hook
         self.tmp.cleanup();self.assertFalse(self.errors,str(self.errors))
     def open_picker(self):
         QTest.mouseClick(self.w.library_button,Qt.LeftButton)
@@ -57,9 +57,9 @@ class FolderFlow(unittest.TestCase):
         self.assertIn('Actualizar biblioteca',self.w.status.text())
         QTest.mouseClick(self.w.scan_button,Qt.LeftButton);until(lambda:not self.w.busy)
         self.assertEqual(len(self.w.catalog.photos(self.w.library['id'])),1)
-        QTest.mouseClick(self.w.nav[1],Qt.LeftButton);QTest.qWait(100)
+        QTest.mouseClick(self.w.nav[1],Qt.LeftButton);until(lambda:self.w.current_grid is not None)
         self.assertEqual(len(self.w.current_grid.records()),1)
-        self.w.close();self.w=MainWindow(self.path);self.w.show();QTest.qWait(100)
+        self.w.close();until(lambda:self.w._closed);self.w=MainWindow(self.path);self.w.show();QTest.qWait(100)
         self.assertFalse(self.w.busy);self.assertEqual(self.w.library['path'],str(self.photos.resolve()))
         self.assertEqual(len(self.w.catalog.photos(self.w.library['id'])),1)
     def test_welcome_button_opens_visible_picker(self):

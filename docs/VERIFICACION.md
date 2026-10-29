@@ -1,5 +1,9 @@
 # Verificación · beta 0.9
 
+La verificación vigente de beta 3 está en [CAMBIOS-beta-3.md](CAMBIOS-beta-3.md)
+y en `validation/`. Las secciones siguientes también conservan evidencia
+histórica de betas 1 y 2; Windows sigue requiriendo su ejecución específica.
+
 ## Alcance
 
 Se ejecutan pruebas de SQLite, cambios incrementales, cancelación, duplicados

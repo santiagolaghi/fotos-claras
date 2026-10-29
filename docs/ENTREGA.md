@@ -1,4 +1,9 @@
-# Fotos Claras 0.9.0-beta.2 · avance de reconstrucción
+# Fotos Claras 0.9.0-beta.3 · avance de reconstrucción
+
+La beta 3 reemplaza el agrupamiento, aísla análisis en otro proceso y agrega
+revisión de coincidencias, confirmación desde una foto y álbumes por combinación.
+Ver [cambios, pruebas y límites](CAMBIOS-beta-3.md). Para aplicar la detección
+nueva a resultados antiguos, ejecutar «Buscar rostros» una vez.
 
 Se reemplazó Tkinter por Qt y se implementó el estilo Álbum Editorial: marfil,
 verde oliva, títulos editoriales, mosaico con fotos propias, tarjetas y navegación

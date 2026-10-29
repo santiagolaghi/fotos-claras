@@ -5,11 +5,17 @@ import time
 import traceback
 from collections import OrderedDict
 from pathlib import Path
-from PySide6.QtCore import Qt,QObject,Signal,QRunnable,QThreadPool,QAbstractListModel,QModelIndex,QSize,QRectF,QTimer,QItemSelectionModel
+from PySide6.QtCore import Qt,QObject,Signal,QRunnable,QThreadPool,QAbstractListModel,QAbstractTableModel,QModelIndex,QSize,QRectF,QTimer,QItemSelectionModel
 from PySide6.QtGui import QImage,QPixmap,QPainter,QColor,QFont,QPainterPath,QPen,QIcon
 from PySide6.QtWidgets import (QListView,QStyledItemDelegate,QAbstractItemView,QDialog,QVBoxLayout,
     QHBoxLayout,QPushButton,QLabel,QGraphicsView,QGraphicsScene,QFrame)
 from .imaging import open_rgb
+
+
+def decode_image(path,side):
+    image=open_rgb(path,side)
+    # QImage is safe in workers; QPixmap and disk decoding stay off the UI.
+    return QImage(image.tobytes(),image.width,image.height,image.width*3,QImage.Format_RGB888).copy()
 
 
 class Signals(QObject):
@@ -36,30 +42,33 @@ class Task(QRunnable):
 class Thumbnails(QObject):
     ready=Signal(str,object)
     def __init__(self,parent=None):
-        super().__init__(parent);self.pool=QThreadPool(self);self.pool.setMaxThreadCount(3)
+        super().__init__(parent);self.pool=QThreadPool(self);self.pool.setMaxThreadCount(2)
         self.cache=OrderedDict();self.pending=set();self.ready.connect(self._ready)
-        self.tasks={}
+        self.tasks={};self.bytes=0;self.budget=48*1024*1024;self.stopping=False
     def request(self,path):
         if not path: return None
         if path in self.cache:
             self.cache.move_to_end(path);return self.cache[path]
+        if self.stopping:return None
         # Limit queued work while rapidly scrolling through thousands of images.
         if path not in self.pending and len(self.pending)<36:
             self.pending.add(path)
             def read(_):
                 try:
-                    img=open_rgb(path,480);out=io.BytesIO();img.save(out,format='JPEG',quality=88)
-                    return out.getvalue()
-                except Exception: return b''
+                    return decode_image(path,400)
+                except Exception:return QImage()
             task=Task(read);self.tasks[path]=task
             task.signals.finished.connect(lambda result,p=path:self.ready.emit(p,result))
             self.pool.start(task)
         return None
     def _ready(self,path,data):
         self.pending.discard(path);self.tasks.pop(path,None)
-        image=QImage.fromData(data) if data else QImage()
-        self.cache[path]=image
-        while len(self.cache)>96: self.cache.popitem(last=False)
+        image=data if isinstance(data,QImage) else QImage()
+        prior=self.cache.pop(path,None)
+        if prior is not None:self.bytes-=prior.sizeInBytes()
+        self.cache[path]=image;self.bytes+=image.sizeInBytes()
+        while self.bytes>self.budget or len(self.cache)>160:
+            _,old=self.cache.popitem(last=False);self.bytes-=old.sizeInBytes()
     def shutdown(self): self.pool.waitForDone()
 
 
@@ -76,13 +85,25 @@ class PhotoModel(QAbstractListModel):
         if not index.isValid() or index.row()>=len(self.records): return None
         r=self.records[index.row()]
         if role==Qt.UserRole: return r
-        if role==Qt.DisplayRole: return (r.get('name') or '¿Quién es esta persona?') if self.people else Path(r.get('path','')).name
+        if role==Qt.DisplayRole: return (r.get('name') or '¿Quién es esta persona?') if self.people else (r.get('name') or Path(r.get('path','')).name)
         if role==Qt.ToolTipRole: return r.get('path') or r.get('name') or 'Sin identificar'
         if role==Qt.AccessibleTextRole: return self.data(index,Qt.DisplayRole)
         if role==Qt.DecorationRole: return self.thumbs.request(r.get('thumb') or r.get('path'))
     def changed(self,path,_):
         for i in self.by_path.get(path,[]):
             index=self.index(i);self.dataChanged.emit(index,index,[Qt.DecorationRole])
+
+
+class FilePlanModel(QAbstractTableModel):
+    """Virtual preview; do not construct 40,000 QStandardItems on the UI thread."""
+    def __init__(self,items,parent=None):super().__init__(parent);self.items=items
+    def rowCount(self,parent=QModelIndex()):return 0 if parent.isValid() else len(self.items)
+    def columnCount(self,parent=QModelIndex()):return 0 if parent.isValid() else 2
+    def data(self,index,role=Qt.DisplayRole):
+        if index.isValid() and role in (Qt.DisplayRole,Qt.ToolTipRole):return self.items[index.row()][('source','target')[index.column()]]
+    def headerData(self,section,orientation,role=Qt.DisplayRole):
+        if role==Qt.DisplayRole:
+            return ('Ubicación actual','Ubicación después de confirmar')[section] if orientation==Qt.Horizontal else section+1
 
 
 class TileDelegate(QStyledItemDelegate):
@@ -117,7 +138,10 @@ class TileDelegate(QStyledItemDelegate):
         p.drawText(QRectF(r.x()+9,r.bottom()-41,r.width()-18,20),Qt.AlignCenter if self.people else Qt.AlignLeft,text)
         data=index.data(Qt.UserRole);p.setPen(QColor('#77786e'));p.setFont(QFont('Segoe UI',9))
         subtitle=(str(data.get('photos',0))+' fotografías') if self.people else f"{data.get('width') or '—'} × {data.get('height') or '—'}"
-        if data.get('ordinal') is not None: subtitle='Rostro '+str(data['ordinal']+1)
+        if data.get('ordinal') is not None:
+            state={'confirmed':'Confirmado','automatic':'Coincidencia automática','unknown':'Por identificar'}.get(data.get('match_state'),'')
+            subtitle=state or 'Rostro '+str(data['ordinal']+1)
+            if data.get('quality',1)<.35:subtitle+=' · baja calidad'
         p.drawText(QRectF(r.x()+9,r.bottom()-22,r.width()-18,17),Qt.AlignCenter if self.people else Qt.AlignLeft,subtitle)
         circle=QRectF(r.right()-28,r.top()+12,18,18)
         p.setPen(QPen(QColor('#fffdf9'),1.5));p.setBrush((QColor('#657047') if selected else QColor(255,255,255,120)));p.drawEllipse(circle)
@@ -136,6 +160,12 @@ class PhotoView(QListView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setAccessibleName('Personas' if people else 'Galería de fotografías')
         self.setFrameShape(QFrame.NoFrame)
+        # Requests beyond the bounded queue are retried when capacity frees up.
+        self.repaint_timer=QTimer(self);self.repaint_timer.setSingleShot(True);self.repaint_timer.setInterval(40)
+        self.repaint_timer.timeout.connect(self.viewport().update)
+        thumbs.ready.connect(self.retry_thumbnails)
+    def retry_thumbnails(self,*args):
+        if self.isVisible() and not self.repaint_timer.isActive():self.repaint_timer.start()
     def records(self): return self.photo_model.records
     def set_records(self,records): self.photo_model.set_records(records)
     def selected(self): return [self.photo_model.records[i.row()] for i in sorted(self.selectedIndexes(),key=lambda x:x.row())]
@@ -176,7 +206,8 @@ class ZoomView(QGraphicsView):
 
 class Viewer(QDialog):
     def __init__(self,records,start=0,parent=None,compare=False):
-        super().__init__(parent);self.records=records;self.position=start;self.tasks=[];self.compare=compare;self.generation=0
+        super().__init__(parent);self.records=records;self.position=start;self.tasks={};self.compare=compare;self.generation=0;self.closing=False;self.completed=False
+        self.close_timer=QTimer(self);self.close_timer.setSingleShot(True);self.close_timer.timeout.connect(lambda:self.done(self.close_result))
         self.setWindowTitle('Comparar fotografías' if compare else 'Fotos Claras · Visor');self.resize(1140,800)
         layout=QVBoxLayout(self);bar=QHBoxLayout()
         for text,fn in [('← Anterior',lambda:self.step(-1)),('Siguiente →',lambda:self.step(1)),('Ajustar',self.fit),('Pantalla completa',self.fullscreen),('Cerrar',self.close)]:
@@ -185,7 +216,7 @@ class Viewer(QDialog):
         row=QHBoxLayout();self.left=ZoomView();row.addWidget(self.left);self.right=ZoomView() if compare else None
         if compare: row.addWidget(self.right)
         layout.addLayout(row,1);self.note=QLabel('Rueda: zoom · Arrastrá para recorrer · ← → para navegar · Esc para cerrar');layout.addWidget(self.note)
-        self.pool=QThreadPool(self);self.pool.setMaxThreadCount(2);self.show_photo()
+        self.pool=QThreadPool(self);self.pool.setMaxThreadCount(1);self.show_photo()
     def fit(self):
         self.left.fit()
         if self.right: self.right.fit()
@@ -199,18 +230,31 @@ class Viewer(QDialog):
         self.info.setText('\n'.join(f"{r['path']}  ·  {r.get('width','—')} × {r.get('height','—')}  ·  {(r.get('size') or 0)/1048576:.2f} MB  ·  {r.get('format') or ''}  ·  {r.get('captured') or ''}" for r,_ in pairs))
         for r,view in pairs:
             def read(_,path=r['path']):
-                img=open_rgb(path,8192);out=io.BytesIO();img.save(out,format='JPEG',quality=96);return out.getvalue()
-            task=Task(read);self.tasks.append(task)
-            task.signals.finished.connect(lambda data,v=view,g=generation:self.loaded(data,v,g))
-            task.signals.failed.connect(lambda err:self.note.setText('No se pudo abrir: '+err));self.pool.start(task)
-    def loaded(self,data,view,generation):
-        if generation==self.generation: view.image(QImage.fromData(data))
+                if generation!=self.generation or self.closing:return QImage()
+                return decode_image(path,6000)
+            task=Task(read);key=id(task);self.tasks[key]=task
+            task.signals.finished.connect(lambda data,v=view,g=generation,k=key:self.loaded(data,v,g,k))
+            task.signals.failed.connect(lambda err,k=key:self.load_failed(err,k));self.pool.start(task)
+    def loaded(self,data,view,generation,key):
+        self.tasks.pop(key,None)
+        if generation==self.generation and not self.closing:view.image(data)
+    def load_failed(self,error,key):
+        self.tasks.pop(key,None)
+        if not self.closing:self.note.setText('No se pudo abrir: '+error)
     def keyPressEvent(self,event):
         if event.key()==Qt.Key_Right:self.step(1)
         elif event.key()==Qt.Key_Left:self.step(-1)
         elif event.key()==Qt.Key_F11:self.fullscreen()
         else:super().keyPressEvent(event)
-    def closeEvent(self,event): self.pool.waitForDone();super().closeEvent(event)
+    def done(self,result):
+        if self.completed:return
+        self.closing=True;self.generation+=1;self.close_result=result
+        if self.pool.activeThreadCount():
+            self.hide();self.close_timer.start(50);return
+        self.completed=True;self.close_timer.stop()
+        super().done(result)
+    def closeEvent(self,event):
+        event.ignore();self.done(QDialog.Rejected)
 
 
 class Mosaic(QFrame):
